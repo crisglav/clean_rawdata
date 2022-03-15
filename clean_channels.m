@@ -1,4 +1,4 @@
-function [signal,removed_channels] = clean_channels(signal,corr_threshold,noise_threshold,window_len,max_broken_time,num_samples,subset_size)
+function [signal,removed_channels] = clean_channels(signal,corr_threshold,noise_threshold,window_len,max_broken_time,num_samples,subset_size,reset_rng)
 % Remove channels with abnormal data from a continuous data set.
 % Signal = clean_channels(Signal,CorrelationThreshold,WindowLength,MaxBrokenTime,NumSamples,SubsetSize,UseGPU)
 %
@@ -111,7 +111,7 @@ X = X(:,usable_channels);
   
 % caculate all-channel reconstruction matrices from random channel subsets   
 if reset_rng
-    rng('default')
+    rng('shuffle')
 end
 if exist('OCTAVE_VERSION', 'builtin') == 0
     P = hlp_microcache('cleanchans',@calc_projector,locs,num_samples,subset_size);
